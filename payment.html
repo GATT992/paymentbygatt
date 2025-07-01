@@ -8,6 +8,7 @@
   <meta property="og:description" content="Klik untuk melihat info pembayaran lengkap." />
   <meta property="og:image" content="" />
   <meta property="og:url" content="" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -21,17 +22,42 @@
       justify-content: center;
       align-items: center;
       text-shadow: 1px 1px 4px black;
+      padding: 20px;
     }
     .card {
       background-color: rgba(0,0,0,0.6);
       padding: 30px;
       border-radius: 16px;
       text-align: center;
-      max-width: 400px;
-      width: 90%;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
-    h2 {
-      margin-bottom: 10px;
+    .title-button {
+      background-color: #00b894;
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: inline-block;
+      transition: 0.3s;
+      margin-bottom: 20px;
+    }
+    .title-button:hover {
+      background-color: #019875;
+    }
+    .method {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .method h3 {
+      margin: 0;
+      margin-bottom: 5px;
+      font-size: 18px;
     }
     .qr {
       margin-top: 20px;
@@ -45,10 +71,23 @@
 </head>
 <body>
   <div class="card">
-    <h2 id="nama">Loading...</h2>
-    <p>📱 WhatsApp: <span id="wa"></span></p>
-    <p id="danaP"></p>
-    <p id="ewalletP"></p>
+    <a id="namaBtn" class="title-button" target="_blank">Kirim WA</a>
+
+    <div id="danaCard" class="method" style="display: none;">
+      <h3>Dana</h3>
+      <p id="danaP"></p>
+    </div>
+
+    <div id="ewalletCard" class="method" style="display: none;">
+      <h3>E-Wallet</h3>
+      <p id="ewalletP"></p>
+    </div>
+
+    <div id="waCard" class="method">
+      <h3>WhatsApp</h3>
+      <p id="waText"></p>
+    </div>
+
     <div class="qr" id="qrisBox"></div>
   </div>
 
@@ -62,14 +101,33 @@
       try {
         const data = JSON.parse(atob(encoded));
         document.body.style.backgroundImage = `url(${data.bg})`;
-        document.getElementById("nama").innerText = data.nama;
-        document.getElementById("wa").innerText = data.wa;
-        if (data.dana) document.getElementById("danaP").innerText = "💰 Dana: " + data.dana;
-        if (data.ewallet) document.getElementById("ewalletP").innerText = "💳 eWallet: " + data.ewallet;
+
+        // Nama jadi tombol WhatsApp
+        const namaBtn = document.getElementById("namaBtn");
+        namaBtn.innerText = `👤 ${data.nama}`;
+        namaBtn.href = `https://wa.me/${data.wa}`;
+
+        // WhatsApp
+        document.getElementById("waText").innerText = data.wa;
+
+        // Dana
+        if (data.dana) {
+          document.getElementById("danaCard").style.display = "block";
+          document.getElementById("danaP").innerText = data.dana;
+        }
+
+        // eWallet
+        if (data.ewallet) {
+          document.getElementById("ewalletCard").style.display = "block";
+          document.getElementById("ewalletP").innerText = data.ewallet;
+        }
+
+        // QRIS
         if (data.qris) {
           document.getElementById("qrisBox").innerHTML = `<p>🔳 QRIS:</p><img src="${data.qris}" alt="QRIS">`;
         }
 
+        // OG meta
         document.querySelector('meta[property="og:image"]').setAttribute("content", data.bg);
         document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
       } catch (e) {
