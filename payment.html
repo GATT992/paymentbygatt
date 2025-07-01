@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment Info</title>
+  <meta property="og:title" content="Pembayaran via Gatt Payment" />
+  <meta property="og:description" content="Klik untuk melihat info pembayaran lengkap." />
+  <meta property="og:image" content="" id="ogImage" />
+  <meta property="og:url" content="" id="ogUrl" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-size: cover;
+      background-position: center;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-shadow: 1px 1px 4px black;
+    }
+    .card {
+      background-color: rgba(0,0,0,0.6);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    .qr {
+      margin-top: 20px;
+    }
+    .qr img {
+      width: 200px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 id="nama"></h2>
+    <p>📱 WhatsApp: <span id="wa"></span></p>
+    <p id="danaP"></p>
+    <p id="ewalletP"></p>
+    <div class="qr" id="qrisBox"></div>
+  </div>
+
+  
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if (!id) {
+    document.body.innerHTML = "<h2>Link tidak valid!</h2>";
+  } else {
+    const data = JSON.parse(localStorage.getItem(`payment_${id}`));
+    if (!data) {
+      document.body.innerHTML = "<h2>Data tidak ditemukan untuk ID ini.</h2>";
+    } else {
+      document.body.style.backgroundImage = `url(${data.bg})`;
+      document.getElementById("nama").innerText = data.nama;
+      document.getElementById("wa").innerText = data.wa;
+      if (data.dana) document.getElementById("danaP").innerText = "💰 Dana: " + data.dana;
+      if (data.ewallet) document.getElementById("ewalletP").innerText = "💳 eWallet: " + data.ewallet;
+      if (data.qris) {
+        document.getElementById("qrisBox").innerHTML = `<p>🔳 QRIS:</p><img src="${data.qris}" alt="QRIS">`;
+      }
+
+      const ogImg = document.querySelector('meta[property="og:image"]');
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogImg) ogImg.setAttribute("content", data.bg);
+      if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+    }
+  }
+</script>
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+      document.body.innerHTML = "<h2>Link tidak valid!</h2>";
+    } else {
+      const data = JSON.parse(atob(id));
+      document.body.style.backgroundImage = `url(${data.bg})`;
+      document.getElementById("nama").innerText = data.nama;
+      document.getElementById("wa").innerText = data.wa;
+      if (data.dana) document.getElementById("danaP").innerText = "💰 Dana: " + data.dana;
+      if (data.ewallet) document.getElementById("ewalletP").innerText = "💳 eWallet: " + data.ewallet;
+      if (data.qris) {
+        document.getElementById("qrisBox").innerHTML = `<p>🔳 QRIS:</p><img src="${data.qris}" alt="QRIS">`;
+      }
+
+      const ogImg = document.querySelector('meta[property="og:image"]');
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogImg) ogImg.setAttribute("content", data.bg);
+      if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+    }
+  </script>
+</body>
+</html>
