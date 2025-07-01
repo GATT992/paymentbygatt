@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -46,62 +45,38 @@
 </head>
 <body>
   <div class="card">
-    <h2 id="nama"></h2>
+    <h2 id="nama">Loading...</h2>
     <p>📱 WhatsApp: <span id="wa"></span></p>
     <p id="danaP"></p>
     <p id="ewalletP"></p>
     <div class="qr" id="qrisBox"></div>
   </div>
 
-  
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-
-  if (!id) {
-    document.body.innerHTML = "<h2>Link tidak valid!</h2>";
-  } else {
-    const data = JSON.parse(localStorage.getItem(`payment_${id}`));
-    if (!data) {
-      document.body.innerHTML = "<h2>Data tidak ditemukan untuk ID ini.</h2>";
-    } else {
-      document.body.style.backgroundImage = `url(${data.bg})`;
-      document.getElementById("nama").innerText = data.nama;
-      document.getElementById("wa").innerText = data.wa;
-      if (data.dana) document.getElementById("danaP").innerText = "💰 Dana: " + data.dana;
-      if (data.ewallet) document.getElementById("ewalletP").innerText = "💳 eWallet: " + data.ewallet;
-      if (data.qris) {
-        document.getElementById("qrisBox").innerHTML = `<p>🔳 QRIS:</p><img src="${data.qris}" alt="QRIS">`;
-      }
-
-      const ogImg = document.querySelector('meta[property="og:image"]');
-      const ogUrl = document.querySelector('meta[property="og:url"]');
-      if (ogImg) ogImg.setAttribute("content", data.bg);
-      if (ogUrl) ogUrl.setAttribute("content", window.location.href);
-    }
-  }
-</script>
-
+  <script>
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
     if (!id) {
       document.body.innerHTML = "<h2>Link tidak valid!</h2>";
     } else {
-      const data = JSON.parse(atob(id));
-      document.body.style.backgroundImage = `url(${data.bg})`;
-      document.getElementById("nama").innerText = data.nama;
-      document.getElementById("wa").innerText = data.wa;
-      if (data.dana) document.getElementById("danaP").innerText = "💰 Dana: " + data.dana;
-      if (data.ewallet) document.getElementById("ewalletP").innerText = "💳 eWallet: " + data.ewallet;
-      if (data.qris) {
-        document.getElementById("qrisBox").innerHTML = `<p>🔳 QRIS:</p><img src="${data.qris}" alt="QRIS">`;
-      }
+      const data = JSON.parse(localStorage.getItem(`payment_${id}`));
+      if (!data) {
+        document.body.innerHTML = "<h2>Data tidak ditemukan untuk ID ini.</h2>";
+      } else {
+        document.body.style.backgroundImage = `url(${data.bg})`;
+        document.getElementById("nama").innerText = data.nama;
+        document.getElementById("wa").innerText = data.wa;
+        if (data.dana) document.getElementById("danaP").innerText = "💰 Dana: " + data.dana;
+        if (data.ewallet) document.getElementById("ewalletP").innerText = "💳 eWallet: " + data.ewallet;
+        if (data.qris) {
+          document.getElementById("qrisBox").innerHTML = `<p>🔳 QRIS:</p><img src="${data.qris}" alt="QRIS">`;
+        }
 
-      const ogImg = document.querySelector('meta[property="og:image"]');
-      const ogUrl = document.querySelector('meta[property="og:url"]');
-      if (ogImg) ogImg.setAttribute("content", data.bg);
-      if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+        const ogImg = document.querySelector('meta[property="og:image"]');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogImg) ogImg.setAttribute("content", data.bg);
+        if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+      }
     }
   </script>
 </body>
