@@ -6,8 +6,8 @@
   <title>Payment Info</title>
   <meta property="og:title" content="Pembayaran via Gatt Payment" />
   <meta property="og:description" content="Klik untuk melihat info pembayaran lengkap." />
-  <meta property="og:image" content="" id="ogImage" />
-  <meta property="og:url" content="" id="ogUrl" />
+  <meta property="og:image" content="" />
+  <meta property="og:url" content="" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -54,15 +54,13 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+    const encoded = params.get("id");
 
-    if (!id) {
+    if (!encoded) {
       document.body.innerHTML = "<h2>Link tidak valid!</h2>";
     } else {
-      const data = JSON.parse(localStorage.getItem(`payment_${id}`));
-      if (!data) {
-        document.body.innerHTML = "<h2>Data tidak ditemukan untuk ID ini.</h2>";
-      } else {
+      try {
+        const data = JSON.parse(atob(encoded));
         document.body.style.backgroundImage = `url(${data.bg})`;
         document.getElementById("nama").innerText = data.nama;
         document.getElementById("wa").innerText = data.wa;
@@ -72,10 +70,10 @@
           document.getElementById("qrisBox").innerHTML = `<p>🔳 QRIS:</p><img src="${data.qris}" alt="QRIS">`;
         }
 
-        const ogImg = document.querySelector('meta[property="og:image"]');
-        const ogUrl = document.querySelector('meta[property="og:url"]');
-        if (ogImg) ogImg.setAttribute("content", data.bg);
-        if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+        document.querySelector('meta[property="og:image"]').setAttribute("content", data.bg);
+        document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
+      } catch (e) {
+        document.body.innerHTML = "<h2>Data tidak bisa dibaca.</h2>";
       }
     }
   </script>
